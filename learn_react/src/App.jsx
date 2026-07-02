@@ -27,6 +27,8 @@ function App() {
   const [name, setName] = useState('后端同学')
   const [logs, setLogs] = useState([])
 
+  console.log('render App', { count, step, name, logs })
+
   // useEffect 可以理解成“这次渲染完成后，再补做一点事”
   // 这里没有直接操作页面，而是记录一条日志，帮助你观察依赖变化
   useEffect(() => {

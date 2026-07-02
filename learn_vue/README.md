@@ -45,6 +45,16 @@ npm run build
 npm run preview
 ```
 
+如果你更习惯 Go 的视角，可以先这样记：
+
+| 这里的命令 / 文件 | 可以先类比成 |
+|---|---|
+| `package.json` | `go.mod` + 一部分 `Makefile` |
+| `npm install` | `go mod download` |
+| `npm run dev` | `go run` 本地开发入口 |
+| `npm run build` | `go build` |
+| `npm run preview` | 本地检查构建产物 |
+
 ## 2. 入口在哪里
 
 推荐按这个顺序看：
@@ -115,6 +125,25 @@ const totalCost = computed(() => requestCount.value * latency.value)
 - 用户输入新值
 - 框架自动把新值写回状态
 
+## 4.1 给 Go 后端同学的 Vue 类比
+
+如果你平时主要写 Go，可以先这样理解：
+
+| Vue 概念 | 可以先粗略类比成什么 |
+|---|---|
+| `main.js` | `main.go`，负责启动应用 |
+| `App.vue` | 一个页面级模块，里面放状态、逻辑、展示 |
+| `ref` | 一块可变的内存状态 |
+| `computed` | 根据已有字段推导出来的只读衍生字段 |
+| `watch` | 数据变化后的 hook |
+| `v-model` | “读当前值 + 写回新值”的绑定封装 |
+| `template` | 最终响应内容模板 |
+
+Vue 和 Go handler 的差异也一样值得先记住：
+
+- Go 里你通常是自己控制“什么时候重新组织响应”
+- Vue 里你更多是声明“哪些数据会影响页面”，然后由框架自动刷新相关部分
+
 ## 5. 典型调用链路
 
 以修改“请求数”为例：
@@ -132,6 +161,12 @@ const totalCost = computed(() => requestCount.value * latency.value)
 - `computed` 像根据已有字段算出来的衍生字段
 - `watch` 像字段变动后的 hook
 - 模板像最终响应体
+
+再补一层更贴近 Go 的说法：
+
+- `computed` 很像“不要重复存库，而是临时根据已有字段算出来”
+- `watch` 很像“字段变化后顺手记日志、发请求、做埋点”
+- `v-model` 很像把“解析请求参数 + 写回结构体字段”合成了一套简写
 
 ## 6. 如何 debug
 
@@ -160,6 +195,11 @@ console.log('render-ish data', {
 
 Vue 和 React 不同，`<script setup>` 不是每次都像 React 组件函数那样整段重跑来驱动视图；
 更贴切的理解是：Vue 追踪了你哪些地方依赖了哪些响应式数据，然后在它们变化时更新相关部分。
+
+这点可以理解成：
+
+- React 更像“整个组件函数重新算一遍，再做差异更新”
+- Vue 更像“谁依赖了这块数据，就重点更新谁”
 
 ### 方法三：在 `watch` 里看前后值
 
@@ -199,6 +239,8 @@ Vue 和 React 不同，`<script setup>` 不是每次都像 React 组件函数那
 - `ref(...)`
 - `computed(...)`
 - `watch(...)`
+
+如果按 Go 习惯来读，这一段可以近似当成“handler 里先定义状态和计算规则”。
 
 ### 第三步：再看 `<template>`
 

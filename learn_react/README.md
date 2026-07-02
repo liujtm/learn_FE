@@ -38,6 +38,16 @@ npm run build
 npm run preview
 ```
 
+如果你更习惯 Go 的视角，可以先这样记：
+
+| 这里的命令 / 文件 | 可以先类比成 |
+|---|---|
+| `package.json` | `go.mod` + 一部分 `Makefile` |
+| `npm install` | `go mod download` |
+| `npm run dev` | `go run` 本地开发入口 |
+| `npm run build` | `go build` |
+| `npm run preview` | 本地检查构建产物 |
+
 ## 2. 入口在哪里
 
 你可以按这个顺序看：
@@ -80,6 +90,26 @@ learn_react/
 4. JSX
    用接近 HTML 的语法写 UI，但本质上还是 JavaScript
 
+## 4.1 给 Go 后端同学的 React 类比
+
+如果你平时主要写 Go，可以先这样建立理解：
+
+| React 概念 | 可以先粗略类比成什么 |
+|---|---|
+| `main.jsx` | `main.go`，负责启动应用 |
+| `App()` 组件 | 一个根据当前状态返回响应内容的函数 |
+| JSX | 组织返回内容的语法糖 |
+| `useState` | 当前进程内的一块状态内存 |
+| `setState` | 更新状态并触发重新计算 |
+| `useMemo` | 根据已有字段做缓存型派生计算 |
+| `useEffect` | 主渲染完成后执行的副作用 hook |
+| `onClick` | 注册一个事件回调 |
+
+但要注意，React 和 Go handler 有一个非常重要的差异：
+
+- Go HTTP handler 常见模式是：请求进来，算完，返回，结束
+- React 组件常见模式是：页面常驻内存，用户不断触发事件，组件不断基于新状态重新执行
+
 ## 5. 典型调用链路
 
 以点击 `+step` 按钮为例：
@@ -98,6 +128,12 @@ learn_react/
 - `useState` 像进程内内存
 - `setState` 像触发一次重新计算
 - React 帮你把“新结果”同步到页面
+
+再翻成 Go 语言一点的说法：
+
+- JSX 像你在拼一个结构化响应体，只不过目标不是 JSON，而是页面结构
+- `setCount(...)` 像你修改了内存中的业务字段，然后框架自动帮你刷新输出
+- `useEffect` 像“主流程结束后再补一个日志/埋点/异步动作”
 
 ## 6. 如何 debug
 
@@ -159,6 +195,8 @@ console.log('render App', { count, step, name })
 
 React 不是“自动接管整个网页”，而是把一个组件树挂到 `#root` 这个 DOM 节点上。
 
+你可以把 `#root` 先理解成一个固定的输出挂载点。
+
 ### 第二步：看 `src/App.jsx` 的状态定义
 
 先找这些变量：
@@ -200,6 +238,8 @@ React 要求你通过 `setCount(...)` 更新状态。
 
 `App()` 不是只执行一次。
 每次状态变化，它都可能重新执行。
+
+这个点对后端同学往往最反直觉，因为它不像“一次请求一个 handler”，更像“同一个 handler 围绕一份常驻状态被持续触发重新计算”。
 
 ### 3. JSX 不是模板引擎
 
