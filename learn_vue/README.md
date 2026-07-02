@@ -72,15 +72,216 @@ npm run preview
 
 ```text
 learn_vue/
+├── .gitignore          # Git 忽略规则
+├── .nvmrc              # 建议使用的 Node 版本
+├── .vscode/
+│   └── extensions.json # VS Code 扩展推荐
 ├── index.html          # 浏览器入口 HTML，提供 app 挂载点
 ├── package.json        # 依赖、脚本命令
+├── package-lock.json   # 依赖锁定文件，确保安装结果一致
+├── vite.config.js      # Vite 配置
+├── public/
+│   ├── favicon.svg     # 浏览器页签图标
+│   └── icons.svg       # 示例页面里复用的图标资源
 ├── src/
 │   ├── main.js         # Vue 应用入口
 │   ├── App.vue         # 主页面组件，演示 ref/computed/watch/v-model
 │   ├── style.css       # 全局样式
-│   └── assets/         # 默认静态资源
-└── public/             # 静态资源目录
+│   ├── components/
+│   │   └── HelloWorld.vue # Vite 脚手架默认示例组件
+│   └── assets/
+│       ├── hero.png    # 页面展示图片
+│       ├── vue.svg     # Vue 标识资源
+│       └── vite.svg    # Vite 标识资源
+├── dist/               # build 产物目录，一般不手改
+├── node_modules/       # 安装下来的依赖目录，一般不手改
+└── 逐行带读.md          # 面向初学者的逐段讲解
 ```
+
+## 3.1 每个关键文件是干什么的
+
+### `.nvmrc`
+
+内容是：
+
+```text
+22
+```
+
+表示这个项目建议使用 Node 22。
+
+进入目录后执行：
+
+```bash
+nvm use
+```
+
+就会按这里的版本切换。
+
+### `.vscode/extensions.json`
+
+这是 VS Code 的扩展推荐文件。
+
+当前内容是在推荐：
+
+- `Vue.volar`
+
+也就是 Vue 官方推荐的编辑器插件之一。
+
+它的作用主要是：
+
+- 提供 Vue 文件语法高亮
+- 类型提示
+- 组件/模板开发体验优化
+
+### `vite.config.js`
+
+这是 Vite 的配置文件。
+
+当前内容很简单，核心就是：
+
+- 引入 Vue 插件
+- 告诉 Vite：这是一个 Vue 项目
+
+如果后面你要改：
+
+- 本地开发端口
+- 打包配置
+- 路径别名
+
+通常都是从这里开始。
+
+### `package.json`
+
+这个文件可以先理解成：
+
+- `go.mod`
+- 加一部分 `Makefile`
+- 再加一部分项目元数据
+
+它主要负责：
+
+- 记录依赖
+- 定义脚本命令
+- 描述项目基本信息
+
+### `package-lock.json`
+
+这是依赖锁定文件。
+
+作用是固定具体依赖版本，避免同一个项目在不同机器、不同时间装出不一样的依赖树。
+
+你可以先粗略类比成 `go.sum`。
+
+### `index.html`
+
+这是浏览器最先加载的入口 HTML。
+
+它主要提供：
+
+- `div#app`
+- 对 `src/main.js` 的加载入口
+
+Vue 最终会把应用挂到 `#app` 这个节点上。
+
+### `src/main.js`
+
+这是 Vue 应用代码入口。
+
+它负责：
+
+- 创建 Vue 应用实例
+- 把 `App.vue` 挂到页面
+
+你可以把它理解成这个前端项目里的 `main.go`。
+
+### `src/App.vue`
+
+这是当前学习示例最核心的文件。
+
+里面同时包含：
+
+- 状态定义
+- 计算属性
+- watch 逻辑
+- 模板结构
+
+如果你只想先抓主要矛盾，就优先看它。
+
+### `src/style.css`
+
+这是当前项目的全局样式文件。
+
+它主要负责页面展示层，不负责业务逻辑。
+
+### `src/components/HelloWorld.vue`
+
+这是 Vite 创建 Vue 项目时带的默认示例组件。
+
+在这份学习工程里，它不是主入口文件，更多是保留给你参考：
+
+- Vue 单文件组件长什么样
+- 一个子组件通常怎么组织
+
+你后面如果想精简项目，也可以删掉它。
+
+### `public/`
+
+这是静态资源目录。
+
+适合放：
+
+- favicon
+- 图标
+- 不需要通过 JS import 的资源
+
+### `src/assets/`
+
+这里放的是通过源码 `import` 进来的资源。
+
+当前包括：
+
+- `hero.png`：页面展示图片
+- `vue.svg`：Vue 图标
+- `vite.svg`：Vite 图标
+
+可以先把它和 `public/` 的区别理解成：
+
+- `public/` 偏“原样静态文件”
+- `src/assets/` 偏“参与源码依赖的资源”
+
+### `dist/`
+
+这是执行 `npm run build` 后生成的目录。
+
+通常用于：
+
+- 看最终产物
+- 配合 `npm run preview` 本地预览
+
+一般不手工改里面的文件。
+
+### `node_modules/`
+
+这是依赖安装目录。
+
+特点是：
+
+- 可删后重装
+- 体积通常较大
+- 平时不直接修改
+
+### `逐行带读.md`
+
+这是专门面向初学者的带读文档。
+
+适合你在看完 README 总览后，再按顺序跟着代码读。
+
+### 这个项目为什么没有 `.oxlintrc.json`
+
+当前 Vue 项目还没有单独加 `oxlint` 或 `eslint` 配置文件。
+
+这不代表 Vue 不能做静态检查，只是这份学习工程目前故意保持更轻，先把响应式、模板、交互主链路学明白。
 
 ## 4. 这份示例在讲什么
 

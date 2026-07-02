@@ -67,15 +67,224 @@ npm run preview
 
 ```text
 learn_react/
-├── index.html          # 浏览器入口 HTML，提供 root 挂载点
-├── package.json        # 依赖、脚本命令
+├── .gitignore         # Git 忽略规则
+├── .nvmrc             # 建议使用的 Node 版本
+├── .oxlintrc.json     # Oxlint 规则配置
+├── index.html         # 浏览器入口 HTML，提供 root 挂载点
+├── package.json       # 依赖、脚本命令
+├── package-lock.json   # 依赖锁定文件，确保安装结果一致
+├── vite.config.js      # Vite 配置
+├── public/
+│   ├── favicon.svg     # 浏览器页签图标
+│   └── icons.svg       # 示例页面里复用的图标资源
 ├── src/
 │   ├── main.jsx        # React 入口，把 App 挂载到 root
 │   ├── App.jsx         # 主页面组件，演示 state/effect/memo
 │   ├── App.css         # 页面局部样式
-│   └── index.css       # 全局样式
-└── public/             # 静态资源目录
+│   ├── index.css       # 全局样式
+│   └── assets/
+│       ├── hero.png    # 页面展示图片
+│       ├── react.svg   # React 标识资源
+│       └── vite.svg    # Vite 标识资源
+├── dist/               # build 产物目录，一般不手改
+├── node_modules/       # 安装下来的依赖目录，一般不手改
+└── 逐行带读.md          # 面向初学者的逐段讲解
 ```
+
+## 3.1 每个关键文件是干什么的
+
+### `.nvmrc`
+
+内容是：
+
+```text
+22
+```
+
+表示这个项目建议用 Node 22。
+
+你进入目录后执行：
+
+```bash
+nvm use
+```
+
+`nvm` 会优先读取这个文件，切到对应版本。
+
+### `.oxlintrc.json`
+
+这是 `oxlint` 的配置文件。
+
+它的职责是：
+
+- 约束代码风格和基础质量
+- 检查 React Hook 的使用规则
+- 在写 React 时尽早发现低级错误
+
+你可以先把它理解成 Go 世界里：
+
+- `golangci-lint` 的规则配置
+- 或者某种更轻量的静态检查配置
+
+当前这份配置重点管的是：
+
+- `react/rules-of-hooks`
+- `react/only-export-components`
+
+也就是说，它主要帮助你避免 Hook 用法写错。
+
+### `vite.config.js`
+
+这是 Vite 的配置入口。
+
+当前内容很简单，核心就是：
+
+- 引入 React 插件
+- 告诉 Vite：这是一个 React 项目
+
+如果后面你要改：
+
+- 开发服务器端口
+- 路径别名
+- 打包配置
+
+通常都会从这个文件开始。
+
+### `package.json`
+
+这个文件很重要，可以先理解成：
+
+- `go.mod`
+- 加一部分 `Makefile`
+- 再加一部分项目元数据
+
+它主要负责：
+
+- 声明依赖
+- 定义脚本命令
+- 标记项目类型
+
+你现在最常用的是 `scripts`：
+
+- `npm run dev`
+- `npm run build`
+- `npm run lint`
+- `npm run preview`
+
+### `package-lock.json`
+
+这是依赖锁定文件。
+
+作用是固定住“这次安装出来的精确依赖版本”，避免：
+
+- 你机器能跑
+- 别人机器装出来版本不一样
+- 过几天重新安装结果漂了
+
+你可以粗略类比成 `go.sum`。
+
+### `index.html`
+
+浏览器真正先打开的是它。
+
+这个文件主要做两件事：
+
+- 提供一个 `div#root`
+- 加载 `src/main.jsx`
+
+React 不会接管整个页面，而是挂到这个 `#root` 上。
+
+### `src/main.jsx`
+
+这是 React 真正的代码入口。
+
+它负责：
+
+- 创建 React 渲染根
+- 把 `App` 挂到 `#root`
+
+你可以把它理解成前端项目里的 `main.go`。
+
+### `src/App.jsx`
+
+这是当前学习项目最核心的文件。
+
+这里放了：
+
+- 状态
+- 事件处理
+- `useEffect`
+- `useMemo`
+- JSX 结构
+
+如果你今天只看一个文件，就先看它。
+
+### `src/App.css` / `src/index.css`
+
+这两个是样式文件。
+
+- `App.css` 更像当前页面自己的样式
+- `index.css` 更像全局基础样式
+
+如果你用 Go 后端视角看，可以把它理解成“不是业务逻辑，而是页面展示层配置”。
+
+### `public/`
+
+这里放的是静态资源。
+
+特点是：
+
+- 不经过组件编译逻辑
+- 打包时会按静态文件处理
+
+适合放：
+
+- favicon
+- 图标
+- 不需要通过 JS import 的资源
+
+### `src/assets/`
+
+这里放的是通过源码 `import` 进来的资源。
+
+和 `public/` 的区别可以先这么记：
+
+- `public/` 更像“原样拷贝的静态文件”
+- `src/assets/` 更像“参与源码引用关系的资源”
+
+当前这些文件主要是：
+
+- `hero.png`：页面展示图片
+- `react.svg`：React 图标
+- `vite.svg`：Vite 图标
+
+### `dist/`
+
+这是 `npm run build` 之后产出的目录。
+
+里面是最终打包结果，通常：
+
+- 可以删了重新生成
+- 不需要手工修改
+- 一般也不作为学习主入口
+
+### `node_modules/`
+
+这是依赖安装目录。
+
+特点是：
+
+- 体积大
+- 可删除后重新安装
+- 平时不用手改
+
+如果你是 Go 同学，可以把它先理解成“本地装下来的依赖缓存目录”。
+
+### `逐行带读.md`
+
+这是专门给学习用的说明文档。
+
+如果 README 帮你建立的是“整体地图”，那这份文档更像“源码讲解版”。
 
 ## 4. 这份示例在讲什么
 
