@@ -18,16 +18,16 @@
 
 如果你平时主要写 Go，可以先用下面这套不严格但很好用的映射建立直觉：
 
-| 前端概念 | 可以先粗略类比成什么 |
-|---|---|
-| 页面 / 组件 | 一个会持续响应用户操作的 handler |
-| state / ref | 进程内当前内存状态 |
-| render / template | 根据当前状态组装响应内容 |
-| 用户点击 / 输入 | 一次新的外部事件 |
-| setState / 修改 ref | 更新内存后触发重新计算 |
-| useEffect / watch | 业务主流程之外的副作用 hook |
-| computed / useMemo | 根据已有字段计算出的派生字段 |
-| Vite dev server | 本地调试服务器 |
+| 前端概念            | 可以先粗略类比成什么             |
+| ------------------- | -------------------------------- |
+| 页面 / 组件         | 一个会持续响应用户操作的 handler |
+| state / ref         | 进程内当前内存状态               |
+| render / template   | 根据当前状态组装响应内容         |
+| 用户点击 / 输入     | 一次新的外部事件                 |
+| setState / 修改 ref | 更新内存后触发重新计算           |
+| useEffect / watch   | 业务主流程之外的副作用 hook      |
+| computed / useMemo  | 根据已有字段计算出的派生字段     |
+| Vite dev server     | 本地调试服务器                   |
 
 不过有一个关键区别要先记住：
 
@@ -38,24 +38,24 @@
 
 下面这张表不追求 100% 严格一一对应，但很适合后端同学快速建立地图感：
 
-| 前端 / Node 世界 | Go / 后端世界里可以先类比成 |
-|---|---|
-| `package.json` | `go.mod` |
-| `package-lock.json` / `pnpm-lock.yaml` | `go.sum` |
-| `node_modules` | 本地依赖缓存 + vendor 目录的混合感觉 |
-| `npm install` | `go mod download` |
-| `npm run dev` | `go run` 一个本地开发入口 |
-| `npm run build` | `go build` |
-| `npm run preview` | 本地跑构建产物看最终效果 |
-| `src/main.jsx` / `src/main.js` | `main.go` |
-| 组件 `App.jsx` / `App.vue` | 一个持续响应事件的业务入口 |
-| props | 上层传进来的参数 |
-| state / ref | 运行中的内存状态 |
-| `useEffect` / `watch` | 副作用 hook |
-| `useMemo` / `computed` | 派生字段 / 缓存计算结果 |
-| 浏览器 DevTools | 类似调试日志 + runtime inspect 工具 |
-| SPA | 一个常驻浏览器内存的单页应用 |
-| 微前端 | 前端领域里的“微服务化拆分” |
+| 前端 / Node 世界                                                                                                                                                                  | Go / 后端世界里可以先类比成          |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `package.json`                                                                                                                                                                    | `go.mod`                             |
+| `package-lock.json` / `pnpm-lock.yaml`                                                                                                                                            | `go.sum`                             |
+| `node_modules`                                                                                                                                                                    | 本地依赖缓存 + vendor 目录的混合感觉 |
+| `npm install`                                                                                                                                                                     | `go mod download`                    |
+| `npm run dev`                                                                                                                                                                     | `go run` 一个本地开发入口            |
+| `npm run build`                                                                                                                                                                   | `go build`                           |
+| `npm run preview`                                                                                                                                                                 | 本地跑构建产物看最终效果             |
+| `src/main.jsx` / `src/main.js`                                                                                                                                                    | `main.go`                            |
+| 组件 `App.jsx` / `App.vue`                                                                                                                                                        | 一个持续响应事件的业务入口           |
+| props(properties)，指“父组件传给子组件的参数”                                                                                                                                     | 上层传进来的参数，类比Go函数入参     |
+| state / ref                                                                                                                                                                       | 运行中的内存状态                     |
+| `useEffect` / `watch`                                                                                                                                                             | 副作用 hook                          |
+| `useMemo` / `computed`                                                                                                                                                            | 派生字段 / 缓存计算结果              |
+| 浏览器 DevTools                                                                                                                                                                   | 类似调试日志 + runtime inspect 工具  |
+| SPA(Single Page Application单页应用)整个网站启动时通常只加载一个主 HTML，后面页面切换、内容刷新，主要靠前端 JavaScript 在浏览器里动态更新，而非每次都让服务端返回整个新的HTML页面 | 一个常驻浏览器内存的单页应用         |
+| 微前端                                                                                                                                                                            | 前端领域里的“微服务化拆分”           |
 
 其中这几组最值得特别记一下：
 
@@ -294,13 +294,13 @@ npm run build
 
 ## React 和 Vue 的一个粗略对照
 
-| 主题 | React | Vue |
-|---|---|---|
-| 状态 | `useState` | `ref` |
-| 派生值 | `useMemo` | `computed` |
-| 副作用 | `useEffect` | `watch` |
-| 输入绑定 | `value + onChange` | `v-model` |
-| 核心感觉 | 组件函数重跑 | 响应式依赖更新 |
+| 主题     | React              | Vue            |
+| -------- | ------------------ | -------------- |
+| 状态     | `useState`         | `ref`          |
+| 派生值   | `useMemo`          | `computed`     |
+| 副作用   | `useEffect`        | `watch`        |
+| 输入绑定 | `value + onChange` | `v-model`      |
+| 核心感觉 | 组件函数重跑       | 响应式依赖更新 |
 
 这个表不追求绝对严谨，但对入门很够用。
 
